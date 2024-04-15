@@ -21,8 +21,8 @@ def format_date(date):
         12: 'декабря'
     }
     minute = date.minute
-    if date.minute == 0:
-        minute = "00"
+    if date.minute < 10:
+        minute = f"0{date.minute}"
     return f"{date.hour}:{minute} {date.day} {months[date.month]} {date.year}"
 
 
