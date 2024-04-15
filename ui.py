@@ -1,8 +1,7 @@
 import disnake
 from functions import get_ip
-from datetime import datetime
+from functions import format_date, get_utc3_time
 import a2s
-
 
 map_img_dict = {
     "rp_anaxes_ngg": "https://cdn.discordapp.com/attachments/1216277741238751322/1228989950448500756/rp_anaxes_ngg.jpg?ex=662e0d15&is=661b9815&hm=dbf04b28b9d9025bf9a68e74ae629e434db79d369dc00ea50b7958b2834b6c8a&",
@@ -26,6 +25,6 @@ def create_embed(data: dict) -> disnake.Embed:
                      icon_url="https://m.media-amazon.com/images/I/51dq-a7FiqL._AC_UF894,1000_QL80_.jpg")
     embed.add_field(name=f"{data['event']} на планете {data['location']}",
                     value=f"На сервере {len(a2s.players(ip))}/{a2s.info(ip).max_players}", inline=False)
+    embed.set_footer(text=format_date(get_utc3_time()))
     embed.set_thumbnail(map_img_dict[a2s.info(ip).map_name])
-    embed.set_footer(text=datetime.now().strftime("%H:%M %d.%m.%Y"))
     return embed

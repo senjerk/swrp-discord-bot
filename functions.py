@@ -1,8 +1,31 @@
 import os
-
+import datetime
 import a2s
 import requests
 from bs4 import BeautifulSoup
+
+
+def format_date(date):
+    months = {
+        1: 'января',
+        2: 'февраля',
+        3: 'марта',
+        4: 'апреля',
+        5: 'мая',
+        6: 'июня',
+        7: 'июля',
+        8: 'августа',
+        9: 'сентября',
+        10: 'октября',
+        11: 'ноября',
+        12: 'декабря'
+    }
+    return f"{date.hour}:{date.minute} {date.day} {months[date.month]} {date.year}"
+
+
+def get_utc3_time():
+    return datetime.datetime.utcnow().replace(tzinfo=datetime.timezone.utc).astimezone(
+        datetime.timezone(datetime.timedelta(hours=3)))
 
 
 def get_data() -> dict:

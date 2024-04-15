@@ -4,6 +4,7 @@ from disnake.ext import commands,  tasks
 from functions import get_ip, get_data
 from ui import create_embed
 import os
+import time
 
 
 class Status(commands.Cog):

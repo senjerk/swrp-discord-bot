@@ -1,0 +1,6 @@
+/venv
+/.idea
+test.py
+.env
+players_count_chart.png
+statistics.db
