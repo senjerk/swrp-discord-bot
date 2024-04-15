@@ -20,7 +20,10 @@ def format_date(date):
         11: 'ноября',
         12: 'декабря'
     }
-    return f"{date.hour}:{date.minute} {date.day} {months[date.month]} {date.year}"
+    minute = date.minute
+    if date.minute == 0:
+        minute = "00"
+    return f"{date.hour}:{minute} {date.day} {months[date.month]} {date.year}"
 
 
 def get_utc3_time():
