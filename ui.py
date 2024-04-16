@@ -14,7 +14,8 @@ map_img_dict = {
     "ngg_sw_m10": "https://cdn.discordapp.com/attachments/1216277741238751322/1228985726117347378/ngg_sw_m10.jpg?ex=662e0926&is=661b9426&hm=56d44ec2bc2d942909c720e9d9b3f1152e81ce2fdde7c4437cc0bb7c9702762f&",
     "ngg_sw_m11": "https://cdn.discordapp.com/attachments/1216277741238751322/1228985726352490597/ngg_sw_m11.jpg?ex=662e0926&is=661b9426&hm=b54149a11e4b72cd8d45267784cde8041a32946f55e8351b5875fc55c98b0450&",
     "ngg_sw_m12": "https://cdn.discordapp.com/attachments/1216277741238751322/1228985726574530581/ngg_sw_m12.jpg?ex=662e0926&is=661b9426&hm=5b55cf011217b327e7e2a063099f2b4e80398646ba71d05e75993406d2058276&",
-    "ngg_sw_m13": "https://cdn.discordapp.com/attachments/1216277741238751322/1228985726809407558/ngg_sw_m13.jpg?ex=662e0926&is=661b9426&hm=4ef01cd22e3068378731a2eed8ed546f9049c502f308a42a03787ef692b097da&"
+    "ngg_sw_m13": "https://cdn.discordapp.com/attachments/1216277741238751322/1228985726809407558/ngg_sw_m13.jpg?ex=662e0926&is=661b9426&hm=4ef01cd22e3068378731a2eed8ed546f9049c502f308a42a03787ef692b097da&",
+    "error_map": "https://static.wikia.nocookie.net/modistalker/images/6/68/%D0%A4%D0%90%D0%9A.png/revision/latest?cb=20230130094044&path-prefix=ru",
 }
 
 
@@ -25,6 +26,9 @@ def create_embed(data: dict) -> disnake.Embed:
                      icon_url="https://m.media-amazon.com/images/I/51dq-a7FiqL._AC_UF894,1000_QL80_.jpg")
     embed.add_field(name=f"{data['event']} на планете {data['location']}",
                     value=f"На сервере {len(a2s.players(ip))}/{a2s.info(ip).max_players}", inline=False)
+    try:
+        embed.set_thumbnail(map_img_dict[a2s.info(ip).map_name])
+    except KeyError:
+        embed.set_thumbnail(map_img_dict["error_map"])
     embed.set_footer(text=format_date(get_utc3_time()))
-    embed.set_thumbnail(map_img_dict[a2s.info(ip).map_name])
     return embed
