@@ -25,8 +25,9 @@ class Status(commands.Cog):
         channel = self.bot.get_channel(int(os.getenv("CHANNEL_ID")))
         try:
             self.my_function(ip)
-            self.server_timeout = False
-            await channel.send(embed=create_timeout_embed(data, False))
+            if self.server_timeout:
+                self.server_timeout = False
+                await channel.send(embed=create_timeout_embed(data, False))
         except TimeoutError:
             if self.server_timeout is not True:
                 self.server_timeout = True
