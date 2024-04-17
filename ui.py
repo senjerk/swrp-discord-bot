@@ -1,4 +1,5 @@
 import disnake
+from disnake import TextInputStyle
 from functions import get_ip
 from functions import format_date, get_utc3_time
 import a2s
@@ -31,4 +32,26 @@ def create_embed(data: dict) -> disnake.Embed:
     except KeyError:
         embed.set_thumbnail(map_img_dict["error_map"])
     embed.set_footer(text=format_date(get_utc3_time()))
+    return embed
+
+
+def create_timeout_embed(data: dict, status) -> disnake.Embed:
+    ip = get_ip()
+    if status:
+        embed = disnake.Embed(title="Сервер выключился.", color=0xad0000)
+        embed.set_author(name="SWRP Phase 1",
+                         icon_url="https://m.media-amazon.com/images/I/51dq-a7FiqL._AC_UF894,1000_QL80_.jpg")
+        embed.set_thumbnail(map_img_dict["error_map"])
+        embed.set_footer(text=format_date(get_utc3_time()))
+    elif not status:
+        embed = disnake.Embed(title="Сервер включился.", color=0xad0000)
+        embed.set_author(name="SWRP Phase 1",
+                         icon_url="https://m.media-amazon.com/images/I/51dq-a7FiqL._AC_UF894,1000_QL80_.jpg")
+        embed.add_field(name=f"{data['event']} на планете {data['location']}",
+                        value=f"На сервере {len(a2s.players(ip))}/{a2s.info(ip).max_players}", inline=False)
+        try:
+            embed.set_thumbnail(map_img_dict[a2s.info(ip).map_name])
+        except KeyError:
+            embed.set_thumbnail(map_img_dict["error_map"])
+        embed.set_footer(text=format_date(get_utc3_time()))
     return embed
