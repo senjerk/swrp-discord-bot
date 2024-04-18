@@ -53,10 +53,12 @@ class Status(commands.Cog):
             if self.flag:
                 if data["event"] != "База" and self.events is False:
                     self.events = True
-                    embed = create_embed(data)
+                    embed = create_embed(data, True)
                     await channel.send(embed=embed)
                 elif data["event"] == "База" and self.events is True:
                     self.events = False
+                    embed = create_embed(data, False)
+                    await channel.send(embed=embed)
                 await self.bot.change_presence(
                     activity=disnake.Game(name=f"{data['event']}, карта: {data['location']}"))
                 self.flag = False

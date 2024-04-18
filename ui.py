@@ -20,9 +20,12 @@ map_img_dict = {
 }
 
 
-def create_embed(data: dict) -> disnake.Embed:
+def create_embed(data: dict, status: bool) -> disnake.Embed:
     ip = get_ip()
-    embed = disnake.Embed(title="Началась спец. операция.", color=0xad0000)
+    title = "Началась спец. операция."
+    if status is False:
+        title = "Возвращаемся домой."
+    embed = disnake.Embed(title=title, color=0xad0000)
     embed.set_author(name="SWRP Phase 1",
                      icon_url="https://m.media-amazon.com/images/I/51dq-a7FiqL._AC_UF894,1000_QL80_.jpg")
     embed.add_field(name=f"{data['event']} на планете {data['location']}",
