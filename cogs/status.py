@@ -2,7 +2,7 @@ import disnake
 import a2s
 from disnake.ext import commands, tasks
 from functions import get_ip, get_data
-from ui import create_embed, create_timeout_embed
+from ui import create_embed, create_custom_embed, create_timeout_embed
 import os
 from timeout_decorator import timeout
 
@@ -14,11 +14,26 @@ class Status(commands.Cog):
         self.flag = True
         self.server_timeout = False
 
-    @timeout(5)
+    @timeout(15)
     def my_function(self, ip: tuple) -> None:
-        print(a2s.players(ip))
+        a2s.players(ip)
 
-    @tasks.loop(seconds=10.0)
+    @commands.slash_command(name="custom_event", description="Объявить о неучтенной спец. операции",
+                            guild_ids=[int(os.getenv("GUILD_ID"))],
+                            options=[
+                                disnake.Option("event", "Выберите вариант", required=True,
+                                               choices=[
+                                                   disnake.OptionChoice(name="Сбор кристаллов",
+                                                                        value="Сбор кристаллов"),
+                                                   disnake.OptionChoice(name="Красный код", value="Красный код"),
+                                               ])
+                            ])
+    async def custom_event(self, inter: disnake.ApplicationCommandInteraction, event):
+        data = get_data()
+        channel = self.bot.get_channel(int(os.getenv("CHANNEL_ID")))
+        await channel.send(embed=create_custom_embed(data, event))
+
+    @tasks.loop(seconds=20.0)
     async def bot_set_status(self) -> None:
         data = get_data()
         ip = get_ip()
@@ -42,7 +57,8 @@ class Status(commands.Cog):
                     await channel.send(embed=embed)
                 elif data["event"] == "База" and self.events is True:
                     self.events = False
-                await self.bot.change_presence(activity=disnake.Game(name=f"{data['event']}, карта: {data['location']}"))
+                await self.bot.change_presence(
+                    activity=disnake.Game(name=f"{data['event']}, карта: {data['location']}"))
                 self.flag = False
             else:
                 await self.bot.change_presence(
